@@ -35,9 +35,21 @@ class AIEditor:
             # Fallback to Gemini model
             self.model = genai.GenerativeModel('gemini-2.0-flash')
         
-    def generate_text(self, prompt, max_tokens=2000):
+    def generate_text(self, prompt, doc_type="plain", max_tokens=2000):
         try:
-            response = self.model.generate_content(prompt)
+            # Add formatting instructions based on document type
+            format_instructions = {
+                "plain": "Format as plain text with clear paragraphs.",
+                "academic": "Format as an academic paper with proper citations, headings, and academic language.",
+                "business": "Format as a business document with professional language and clear sections.",
+                "creative": "Format as a creative writing piece with engaging narrative and descriptive language.",
+                "technical": "Format as a technical document with clear explanations and technical terminology.",
+                "email": "Format as a professional email with proper greeting and closing.",
+                "blog": "Format as a blog post with engaging headings and conversational tone."
+            }
+            
+            formatted_prompt = f"{prompt}\n\nPlease format the response as a {doc_type} document. {format_instructions[doc_type]}"
+            response = self.model.generate_content(formatted_prompt)
             return response.text
         except Exception as e:
             return f"Error generating text: {str(e)}"
@@ -127,6 +139,15 @@ class TextEditor:
         # AI Generation Controls
         ttk.Label(self.scrollable_frame, text="AI Generation").pack(pady=5)
         
+        # Document type selection
+        ttk.Label(self.scrollable_frame, text="Document Type:").pack(anchor='w', padx=5)
+        self.doc_type = ttk.Combobox(self.scrollable_frame, values=[
+            "plain", "academic", "business", "creative", 
+            "technical", "email", "blog"
+        ], state="readonly")
+        self.doc_type.set("plain")
+        self.doc_type.pack(fill=tk.X, padx=5, pady=5)
+        
         self.prompt_text = scrolledtext.ScrolledText(self.scrollable_frame, height=5)
         self.prompt_text.pack(fill=tk.X, padx=5, pady=5)
         
@@ -191,12 +212,14 @@ class TextEditor:
     
     def generate_text(self):
         prompt = self.prompt_text.get(1.0, tk.END).strip()
+        doc_type = self.doc_type.get()
+        
         if not prompt:
             messagebox.showwarning("Warning", "Please enter a prompt for text generation")
             return
         
         try:
-            generated_text = self.ai_editor.generate_text(prompt)
+            generated_text = self.ai_editor.generate_text(prompt, doc_type)
             self.text_area.insert(tk.INSERT, generated_text)
         except Exception as e:
             messagebox.showerror("Error", f"Error generating text: {str(e)}")
