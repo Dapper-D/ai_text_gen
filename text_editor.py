@@ -14,11 +14,10 @@ load_dotenv()
 
 class AIEditor:
     def __init__(self):
-        # Default API key for Gemini AI (free tier)
-        default_api_key = "AIzaSyDAn8Nk89nmhRi3qNmo7wH7-ov3Che0UeM"  # Gemini API key
-        
-        # Try to get API key from environment, fall back to default if not found
-        api_key = os.getenv('GEMINI_API_KEY', default_api_key)
+        # Get API key from environment variables
+        api_key = os.getenv('GEMINI_API_KEY')
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable is not set. Please set it in your .env file.")
         
         # Configure Google AI with Gemini API
         genai.configure(api_key=api_key)
