@@ -14,19 +14,25 @@ load_dotenv()
 
 class AIEditor:
     def __init__(self):
-        # Configure Google AI
-        genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
+        # Default API key for Gemini AI (free tier)
+        default_api_key = "AIzaSyDAn8Nk89nmhRi3qNmo7wH7-ov3Che0UeM"  # Gemini API key
+        
+        # Try to get API key from environment, fall back to default if not found
+        api_key = os.getenv('GEMINI_API_KEY', default_api_key)
+        
+        # Configure Google AI with Gemini API
+        genai.configure(api_key=api_key)
         
         # List available models
         try:
             for m in genai.list_models():
                 if 'generateContent' in m.supported_generation_methods:
                     print(f"Available model: {m.name}")
-            # Use the first available model that supports generateContent
+            # Use Gemini model
             self.model = genai.GenerativeModel('gemini-2.0-flash')
         except Exception as e:
             print(f"Error listing models: {str(e)}")
-            # Fallback to a known working model
+            # Fallback to Gemini model
             self.model = genai.GenerativeModel('gemini-2.0-flash')
         
     def generate_text(self, prompt, max_tokens=2000):
