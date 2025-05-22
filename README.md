@@ -14,14 +14,13 @@ A powerful text editor application that combines traditional text editing capabi
 ## Requirements
 
 - Python 3.7 or higher
-- Google Cloud API key for Gemini AI
 - Internet connection for AI features and web search
 
 ## Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ai_text_gen.git
+git clone https://github.com/Dapper-D/ai_text_gen.git
 cd ai_text_gen
 ```
 
@@ -30,10 +29,12 @@ cd ai_text_gen
 pip install -r requirements.txt
 ```
 
-3. Create a `.env` file in the project root and add your Google API key:
+3. (Optional) Create a `.env` file in the project root and add your Gemini API key if you want to use your own:
 ```
 GEMINI_API_KEY=your_api_key_here
 ```
+
+Note: The application comes with a free-tier Gemini API key by default. You only need to create a `.env` file if you want to use your own API key. To get your own Gemini API key, visit https://makersuite.google.com/app/apikey.
 
 ## Usage
 
@@ -46,7 +47,7 @@ python text_editor.py
 
 1. **Text Generation**
    - Enter your prompt in the AI Generation section
-   - Click "Generate" to create AI-generated text
+   - Click "Generate" to create AI-generated text using Gemini AI
 
 2. **Web Search**
    - Enter your search query
@@ -57,7 +58,7 @@ python text_editor.py
    - Select text in the main editor
    - Click "Copy Selected" to move it to the transformation area
    - Enter transformation instructions
-   - Click "Apply Changes" to transform the text
+   - Click "Apply Changes" to transform the text using Gemini AI
 
 ## License
 
